@@ -1,0 +1,22 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Api for test task.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Bohdan Yaskevych",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "passport": "^0.4.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "eslint": "^7.21.0"
+  }
+}
