@@ -3,3 +3,9 @@ module.exports.login = (req, res) => {
     login: 'true'
   });
 };
+
+module.exports.register = (req, res) => {
+  res.status(201).json({
+    register: 'true'
+  });
+};
