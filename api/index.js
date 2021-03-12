@@ -1,9 +1,8 @@
-'use strict';
-
+// eslint-disable-next-line strict
 const express = require('express');
 const bodyParser = require('body-parser');
 // eslint-disable-next-line no-unused-vars
-const dotenv = require('dotenv').config();
+const dotEnv = require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 8080;
