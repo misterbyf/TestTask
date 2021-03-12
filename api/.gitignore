@@ -2,8 +2,9 @@
 
 # dependencies
 /node_modules
+/data
 
 .idea
-.env.local
+.env
 .eslintrc.json
 package-lock.json
