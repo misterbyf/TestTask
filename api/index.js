@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 // eslint-disable-next-line no-unused-vars
 const dotEnv = require('dotenv').config();
 const authRouter = require('./routes/auth');
@@ -13,13 +14,16 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const URL = process.env.URL;
 
+app.use(require('morgan')('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(passport.initialize());
+require('./midlleware/passport')(passport);
 
-app.use('/api', authRouter);
-app.use('/api', userRouter);
-app.use('/api', surveyRouter);
-app.use('/api', surveyAnswerRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/survey', surveyRouter);
+app.use('/api/survey_answer', surveyAnswerRouter);
 
 async function runServer() {
   try {
