@@ -1,17 +1,21 @@
-module.exports.createUser = (req, res) => {
+const createUser = (req, res) => {
   res.status(201).json({
     user: 'userCreated'
   });
 };
-
-module.exports.getUser = (req, res) => {
+const getUser = (req, res) => {
   res.status(200).json({
     user: 'showUsers'
   });
 };
-
-module.exports.updateUser = (req, res) => {
+const updateUser = (req, res) => {
   res.status(200).json({
     user: 'userUpdate'
   });
+};
+
+module.exports = {
+  createUser,
+  getUser,
+  updateUser
 };

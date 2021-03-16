@@ -4,7 +4,8 @@
   "description": "Api for test task.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "dev": "nodemon --inspect index.js"
   },
   "author": "Bohdan Yaskevych",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "body-parser": "^1.19.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "express": "^4.17.1",
+    "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.0",
     "morgan": "^1.10.0",

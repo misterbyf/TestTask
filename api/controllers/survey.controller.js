@@ -1,23 +1,30 @@
-module.exports.createSurvey = (req, res) => {
+const createSurvey = (req, res) => {
   res.status(201).json({
     survey: 'surveyCreated'
   });
 };
 
-module.exports.getSurvey = (req, res) => {
+const getSurvey = (req, res) => {
   res.status(200).json({
     survey: 'showSurvey'
   });
 };
 
-module.exports.updateSurvey = (req, res) => {
+const updateSurvey = (req, res) => {
   res.status(200).json({
     survey: 'updateSurvey'
   });
 };
 
-module.exports.removeSurvey = (req, res) => {
+const removeSurvey = (req, res) => {
   res.status(200).json({
     survey: 'removeSurvey'
   });
+};
+
+module.exports = {
+  createSurvey,
+  getSurvey,
+  updateSurvey,
+  removeSurvey
 };

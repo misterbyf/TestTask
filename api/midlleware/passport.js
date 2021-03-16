@@ -1,5 +1,7 @@
 const JWTStrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
+// eslint-disable-next-line no-unused-vars
+const dotEnv = require('dotenv').config();
 const User = require('../models/User');
 const key = process.env.JWT;
 
