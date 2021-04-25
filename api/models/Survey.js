@@ -1,21 +1,20 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose, { Schema } from 'mongoose';
 
-const surveySchema = new Schema({
+const reqString = {
+  type: String,
+  required: true
+};
+
+const questionSchema = new Schema({
   name: {
-    type: String,
-    required: true
-  },
-  url: {
-    type: String,
-    required: true
-  },
-  question: [{
-    name: {
-      type: String,
-      default: ''
-    }
-  }]
+    type: String
+  }
 });
 
-module.exports = mongoose.model('Survey', surveySchema);
+const surveySchema = new Schema({
+  name: reqString,
+  url: reqString,
+  questions: [questionSchema]
+});
+
+export default mongoose.model('Survey', surveySchema);

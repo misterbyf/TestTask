@@ -1,62 +1,83 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const status = require('http-status');
-// eslint-disable-next-line no-unused-vars
-const dotEnv = require('dotenv').config();
-const User = require('../models/User');
-const key = process.env.JWT;
+import bCrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import httpStatus from 'http-status';
+import redisClient from '../utils/init.redis';
+import User from '../models/User';
+const SECRET_KEY = process.env.JWT;
 
-const login = async (req, res, next) => {
+async function login(req, res, next) {
   try {
     const { email, password } = req.body;
-    const {
-      _id: candidateId,
-      email: candidateEmail,
-      password: candidatePassword
-    } = await User.findOne({ email });
-    if (!candidatePassword) {
-      return res.status(status.NOT_FOUND).json({ message: 'User does not exist.' });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(httpStatus.NOT_FOUND).json({ message: 'User does not exist.' });
     }
-    const passwordResult = bcrypt.compareSync(password, candidatePassword);
+    const passwordResult = await bCrypt.compare(password, user.password);
     if (!passwordResult) {
-      return res.status(status.BAD_REQUEST).json({ message: 'Incorrect password, please try again.' });
+      return res.status(httpStatus.BAD_REQUEST).json({ message: 'Incorrect password.' });
     }
     const token = jwt.sign({
-      // eslint-disable-next-line no-underscore-dangle
-      userId: candidateId,
-      email: candidateEmail
-    }, key, { expiresIn: 60 * 60 });
-    return res.status(status.OK).json({ token: `Bearer ${token}` });
+      userId: user._id,
+      email: user.email
+    }, SECRET_KEY, { expiresIn: 60 * 60 });
+    await redisClient.set(user._id.toString(), token.toString(), 'EX', 60 * 60);
+    return res
+      .cookie('jwt', token, { signed: true, httpOnly: true })
+      .status(httpStatus.OK)
+      .json({
+        userId: user._id,
+        token: `Bearer ${token}`
+      });
   } catch (error) {
     return next(error);
   }
-};
+}
 
-const register = async (req, res, next) => {
+async function register(req, res, next) {
   try {
     const { name, email, password } = req.body;
     const candidate = await User.findOne({ email });
     if (candidate) {
-      return res.status(status.BAD_REQUEST).json({ message: 'User with same email has been created.' });
+      return res.status(httpStatus.BAD_REQUEST).json({ message: 'User with same email has been created.' });
     }
-    const salt = bcrypt.genSaltSync(10);
+    const salt = bCrypt.genSaltSync(10);
     const user = new User({
       name,
       email,
-      password: bcrypt.hashSync(password, salt)
+      password: bCrypt.hashSync(password, salt)
     });
-    try {
-      await user.save();
-      return res.status(status.CREATED).json(user);
-    } catch (error) {
-      return next(error);
-    }
+    await user.save();
+    return res.status(httpStatus.CREATED).json(user);
   } catch (error) {
     return next(error);
   }
-};
+}
 
-module.exports = {
+async function googleAuthorization(req, res, next) {
+  try {
+    const { email } = req.user;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(httpStatus.NOT_FOUND).json({ message: 'User does not exist.' });
+    }
+    const token = jwt.sign({
+      userId: user._id,
+      email: user.email
+    }, SECRET_KEY, { expiresIn: 60 * 60 });
+    await redisClient.set(user._id.toString(), token.toString(), 'EX', 60 * 60);
+    return res
+      .cookie('jwt', token, { signed: true, httpOnly: true })
+      .status(httpStatus.OK)
+      .json({
+        token: `Bearer ${token}`
+      });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export {
   login,
-  register
+  register,
+  googleAuthorization
 };
