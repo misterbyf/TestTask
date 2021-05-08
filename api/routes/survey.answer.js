@@ -1,11 +1,11 @@
-const express = require('express');
-const passport = require('passport');
+import express from 'express';
+import passport from 'passport';
+import { createSurveyAnswer, getSurveyAnswer } from '../controllers/survey.answer.controller';
 const router = express.Router();
-const surveyAnswerController = require('../controllers/survey.answer.controller');
 
 router.route('/')
-  .get(passport.authenticate('jwt', { session: false }))
-  .post(surveyAnswerController.createSurveyAnswer);
-router.get('/:id', surveyAnswerController.getSurveyAnswer);
+  .get(passport.authenticate('jwt', { session: false }), getSurveyAnswer)
+  .post(passport.authenticate('jwt', { session: false }), createSurveyAnswer);
+router.get('/:id', passport.authenticate('jwt', { session: false }), getSurveyAnswer);
 
-module.exports = router;
+export default router;

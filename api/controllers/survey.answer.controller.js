@@ -1,22 +1,25 @@
-const createSurveyAnswer = (req, res) => {
-  res.status(201).json({
+async function createSurveyAnswer(req, res, next) {
+  console.log(req.user);
+  console.log(req.body.survey);
+
+  return res.status(201).json({
     surveyAnswer: 'surveyAnswerCreated'
   });
-};
+}
 
-const getSurveyAnswer = (req, res) => {
+function getSurveyAnswer(req, res) {
   res.status(200).json({
     surveyAnswer: 'showSurveyAnswer'
   });
-};
+}
 
-const getSurveyAnswers = (req, res) => {
+function getSurveyAnswers(req, res) {
   res.status(200).json({
     surveyAnswer: 'listSurveyAnswer'
   });
-};
+}
 
-module.exports = {
+export {
   createSurveyAnswer,
   getSurveyAnswer,
   getSurveyAnswers

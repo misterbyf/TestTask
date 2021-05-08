@@ -1,11 +1,17 @@
-const express = require('express');
+import express from 'express';
+import passport from 'passport';
+import {
+  getSurvey,
+  updateSurvey,
+  removeSurvey,
+  createSurvey
+} from '../controllers/survey.controller';
 const router = express.Router();
-const surveyController = require('../controllers/survey.controller');
 
 router.route('/:id')
-  .get(surveyController.getSurvey)
-  .put(surveyController.updateSurvey)
-  .delete(surveyController.removeSurvey);
-router.post('/', surveyController.createSurvey);
+  .get(passport.authenticate('jwt', { session: false }), getSurvey)
+  .delete(passport.authenticate('jwt', { session: false }), removeSurvey);
+router.put('/', passport.authenticate('jwt', { session: false }), updateSurvey);
+router.post('/', passport.authenticate('jwt', { session: false }), createSurvey);
 
-module.exports = router;
+export default router;

@@ -1,9 +1,17 @@
-const express = require('express');
+import express from 'express';
+import passport from 'passport';
+import { googleAuthorization, login, register } from '../controllers/auth.controller';
+import { loginSchema, registerSchema } from '../middleware/schemas.for.validation/authSchema';
+import middlewareValidator from '../middleware/middleware.validator';
 const router = express.Router();
-const authController = require('../controllers/auth.controller');
-const { authValidator } = require('../midlleware/auth.validator');
 
-router.post('/login', authValidator, authController.login);
-router.post('/register', authController.register);
+router.post('/login', middlewareValidator(loginSchema), login);
+router.post('/register', middlewareValidator(registerSchema), register);
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { failureRedirect: '/api/auth/login' }),
+  googleAuthorization
+);
 
-module.exports = router;
+export default router;
