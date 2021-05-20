@@ -12,7 +12,6 @@ export default function middlewareValidator(schema) {
       });
       return next();
     } catch (error) {
-      res.json(error.message);
       return next(error);
     }
   };

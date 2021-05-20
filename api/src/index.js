@@ -9,7 +9,7 @@ import middlewareGoogle from '../middleware/passportGoogle';
 import authRouter from '../routes/auth';
 import userRouter from '../routes/user';
 import surveyRouter from '../routes/survey';
-import surveyAnswerRouter from '../routes/survey.answer';
+import surveyAnswerRouter from '../routes/answer';
 import errorHandler from '../middleware/errorHandler';
 
 const PORT = process.env.PORT || 8080;
@@ -32,7 +32,7 @@ middlewareGoogle(passport);
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/survey', surveyRouter);
-app.use('/api/survey_answer', surveyAnswerRouter);
+app.use('/api/answer', surveyAnswerRouter);
 app.use(errorHandler);
 
 async function runServer() {

@@ -3,14 +3,16 @@ import mongoose, { Schema } from 'mongoose';
 const answerSchema = new Schema({
   user: {
     ref: 'User',
-    type: Schema.Types.ObjectId
+    type: Schema.Types.ObjectId,
+    required: true
   },
   survey: {
     ref: 'Survey',
-    type: Schema.Types.ObjectId
+    type: Schema.Types.ObjectId,
+    required: true
   },
   data: {
-    type: String,
+    type: Schema.Types.Mixed,
     required: true
   }
 });

@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import redisClient from '../utils/init.redis';
 import User from '../models/User';
 const SECRET_KEY = process.env.JWT;
+const saltRounds = 10;
 
 async function login(req, res, next) {
   try {
@@ -20,12 +21,11 @@ async function login(req, res, next) {
       userId: user._id,
       email: user.email
     }, SECRET_KEY, { expiresIn: 60 * 60 });
-    await redisClient.set(user._id.toString(), token.toString(), 'EX', 60 * 60);
+    await redisClient.set(token.toString(), user._id.toString(), 'EX', 60 * 60);
     return res
       .cookie('jwt', token, { signed: true, httpOnly: true })
       .status(httpStatus.OK)
       .json({
-        userId: user._id,
         token: `Bearer ${token}`
       });
   } catch (error) {
@@ -40,7 +40,7 @@ async function register(req, res, next) {
     if (candidate) {
       return res.status(httpStatus.BAD_REQUEST).json({ message: 'User with same email has been created.' });
     }
-    const salt = bCrypt.genSaltSync(10);
+    const salt = bCrypt.genSaltSync(saltRounds);
     const user = new User({
       name,
       email,
@@ -64,7 +64,7 @@ async function googleAuthorization(req, res, next) {
       userId: user._id,
       email: user.email
     }, SECRET_KEY, { expiresIn: 60 * 60 });
-    await redisClient.set(user._id.toString(), token.toString(), 'EX', 60 * 60);
+    await redisClient.set(token.toString(), user._id.toString(), 'EX', 60 * 60);
     return res
       .cookie('jwt', token, { signed: true, httpOnly: true })
       .status(httpStatus.OK)

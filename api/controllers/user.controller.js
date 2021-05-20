@@ -1,6 +1,7 @@
 import User from '../models/User';
 import httpStatus from 'http-status';
 import bCrypt from 'bcrypt';
+const saltRounds = 10;
 
 async function createUser(req, res, next) {
   try {
@@ -9,7 +10,7 @@ async function createUser(req, res, next) {
     if (candidate) {
       return res.status(httpStatus.BAD_REQUEST).json({ message: 'User with same email has been created.' });
     }
-    const salt = bCrypt.genSaltSync(10);
+    const salt = bCrypt.genSaltSync(saltRounds);
     const user = new User({
       name,
       email,
@@ -43,12 +44,12 @@ async function updateUser(req, res, next) {
     const { name, email, password } = req.body;
     const candidate = await User.findById(id);
     if (!candidate) {
-      return res.status(httpStatus.BAD_REQUEST).json({
+      return res.status(httpStatus.NOT_FOUND).json({
         message: 'User does not exist.'
       });
     }
-    const salt = bCrypt.genSaltSync(10);
-    const user = await User.findOneAndUpdate({ _id: id }, {
+    const salt = bCrypt.genSaltSync(saltRounds);
+    const user = await User.updateOne({ _id: id }, {
       $set: {
         name,
         email,
