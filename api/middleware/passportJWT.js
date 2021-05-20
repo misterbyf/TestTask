@@ -15,22 +15,21 @@ const cookieExtractor = (req) => {
 
 const options = {
   jwtFromRequest: cookieExtractor,
-  secretOrKey: SECRET_KEY
+  secretOrKey: SECRET_KEY,
+  passReqToCallback: true
 };
 
 export default function middlewareJwt(passport) {
   passport.use(
-    new JWTStrategy(options, async (payload, done) => {
+    new JWTStrategy(options, async (req, payload, done) => {
       try {
-        const user = await User.findOne({ email: payload.email });
-        const redisToken = await redisClient.get(payload.userId.toString());
-        if (user && redisToken) {
-          done(null, user);
-        } else {
-          done(null, false);
-        }
+        const result = await redisClient.get(req.signedCookies.jwt.toString());
+        if (!result) return done(null, false);
+        const user = await User.findById(result);
+        if (!user) return done(null, false);
+        return done(null, user);
       } catch (error) {
-        console.error(error);
+        return done(error);
       }
     })
   );

@@ -10,8 +10,8 @@ const router = express.Router();
 
 router.route('/:id')
   .get(passport.authenticate('jwt', { session: false }), getSurvey)
-  .delete(passport.authenticate('jwt', { session: false }), removeSurvey);
-router.put('/', passport.authenticate('jwt', { session: false }), updateSurvey);
+  .delete(passport.authenticate('jwt', { session: false }), removeSurvey)
+  .put(passport.authenticate('jwt', { session: false }), updateSurvey);
 router.post('/', passport.authenticate('jwt', { session: false }), createSurvey);
 
 export default router;
