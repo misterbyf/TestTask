@@ -8,6 +8,12 @@ async function createSurvey(req, res, next) {
       url,
       questions
     } = req.body;
+    const result = await Survey.findOne({ url });
+    if (result) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: 'Survey with same email not found.'
+      });
+    }
     const survey = new Survey({
       name,
       url,
