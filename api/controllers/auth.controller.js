@@ -25,9 +25,7 @@ async function login(req, res, next) {
     return res
       .cookie('jwt', token, { signed: true, httpOnly: true })
       .status(httpStatus.OK)
-      .json({
-        token: `Bearer ${token}`
-      });
+      .json(user);
   } catch (error) {
     return next(error);
   }
@@ -61,16 +59,14 @@ async function googleAuthorization(req, res, next) {
       return res.status(httpStatus.NOT_FOUND).json({ message: 'User does not exist.' });
     }
     const token = jwt.sign({
-      userId: user._id,
+      userId: user.id,
       email: user.email
     }, SECRET_KEY, { expiresIn: 60 * 60 });
-    await redisClient.set(token.toString(), user._id.toString(), 'EX', 60 * 60);
+    await redisClient.set(token.toString(), user.id.toString(), 'EX', 60 * 60);
     return res
       .cookie('jwt', token, { signed: true, httpOnly: true })
       .status(httpStatus.OK)
-      .json({
-        token: `Bearer ${token}`
-      });
+      .json(user);
   } catch (error) {
     return next(error);
   }

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack --watch",
     "dev": "nodemon --inspect src/index.js",
-    "test": "mocha --reporter nyan --require @babel/polyfill --require @babel/register ./test/auth.test/*.js"
+    "test": "nodemon --exec  mocha --reporter nyan --require @babel/polyfill --require @babel/register ./test/*.test/*.js"
   },
   "author": "Bohdan Yaskevych",
   "license": "ISC",

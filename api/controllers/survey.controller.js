@@ -11,7 +11,7 @@ async function createSurvey(req, res, next) {
     const result = await Survey.findOne({ url });
     if (result) {
       return res.status(httpStatus.BAD_REQUEST).json({
-        message: 'Survey with same email not found.'
+        message: 'Survey with same email already exist.'
       });
     }
     const survey = new Survey({
@@ -57,8 +57,6 @@ async function updateSurvey(req, res, next) {
         url,
         questions
       }
-    }, {
-      new: true
     });
     return res.status(httpStatus.OK).json(reloadSurvey);
   } catch (error) {
@@ -73,7 +71,7 @@ async function removeSurvey(req, res, next) {
     if (!survey) {
       return res.status(httpStatus.NOT_FOUND).json({ message: 'Survey with same id not found.' });
     }
-    const result = await Survey.remove(id);
+    const result = await Survey.deleteOne({ _id: id });
     return res.status(httpStatus.OK).json(result);
   } catch (error) {
     return next(error);

@@ -4,7 +4,7 @@ import Survey from '../models/Survey';
 
 async function createAnswer(req, res, next) {
   try {
-    const { _id } = req.user;
+    const { id } = req.user;
     const { url } = req.params;
     const data = req.body;
     const survey = await Survey.findOne({ url });
@@ -19,8 +19,8 @@ async function createAnswer(req, res, next) {
       });
     }
     const answer = new Answer({
-      user: _id,
-      survey: survey._id,
+      user: id,
+      survey: survey.id,
       data
     });
     const result = await answer.save();
@@ -70,5 +70,5 @@ async function getAnswers(req, res, next) {
 export {
   createAnswer,
   getAnswer,
-  getAnswers,
+  getAnswers
 };

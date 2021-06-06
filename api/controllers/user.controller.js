@@ -55,8 +55,6 @@ async function updateUser(req, res, next) {
         email,
         password: bCrypt.hashSync(password, salt)
       }
-    }, {
-      new: true
     });
     return res.status(httpStatus.OK).json(user);
   } catch (error) {
