@@ -71,7 +71,7 @@ async function removeSurvey(req, res, next) {
     if (!survey) {
       return res.status(httpStatus.NOT_FOUND).json({ message: 'Survey with same id not found.' });
     }
-    const result = await Survey.deleteOne({ _id: id });
+    const result = await Survey.remove({ _id: id });
     return res.status(httpStatus.OK).json(result);
   } catch (error) {
     return next(error);

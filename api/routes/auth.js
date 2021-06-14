@@ -1,8 +1,9 @@
 import express from 'express';
 import passport from 'passport';
-import { googleAuthorization, login, register } from '../controllers/auth.controller';
+import { googleAuthorization, login, logout, register } from '../controllers/auth.controller';
 import { loginSchema, registerSchema } from '../middleware/schemas.for.validation/auth.schema';
 import middlewareValidator from '../middleware/middleware.validator';
+import middlewarePassportJwt from '../middleware/middleware.passport.jwt';
 const router = express.Router();
 
 router.post('/login', middlewareValidator(loginSchema), login);
@@ -13,5 +14,6 @@ router.get(
   passport.authenticate('google', { failureRedirect: '/api/auth/login' }),
   googleAuthorization
 );
+router.get('/logout', middlewarePassportJwt, logout);
 
 export default router;

@@ -51,6 +51,19 @@ async function register(req, res, next) {
   }
 }
 
+async function logout(req, res, next) {
+  try {
+    return res
+      .status(httpStatus.OK)
+      .cookie('jwt', '', { maxAge: 1 })
+      .json({
+        message: 'You are login out.'
+      });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 async function googleAuthorization(req, res, next) {
   try {
     const { email } = req.user;
@@ -74,6 +87,7 @@ async function googleAuthorization(req, res, next) {
 
 export {
   login,
+  logout,
   register,
   googleAuthorization
 };

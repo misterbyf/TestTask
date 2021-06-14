@@ -4,17 +4,15 @@ import {
   beforeEach
 } from 'mocha';
 import { expect } from 'chai/index';
-import request from 'supertest';
 import httpStatus from 'http-status';
-import app from '../../src/index';
 import clearCollections from '../../utils/clear.collections';
-import { createDefaultUser, loginUser } from '../../utils/init.data.user';
+import { createDefaultUser, defaultUser, loginUserAgent} from '../../utils/init.data.user';
 import { createDefaultSurvey, defaultSurvey } from '../../utils/init.data.survey';
 import { createAnswerObject, createDefaultAnswer } from '../../utils/init.data.answer';
 
-let cookie;
 let answer;
 let survey;
+let agent;
 
 describe('/answer', () => {
   beforeEach(async () => {
@@ -22,33 +20,41 @@ describe('/answer', () => {
     await createDefaultUser();
     survey = await createDefaultSurvey();
     answer = await createDefaultAnswer();
-    cookie = await loginUser();
+    agent = await loginUserAgent();
   });
   it('POST api/answer', async () => {
     const data = await createAnswerObject();
-    const res = await request(app)
+    await agent
       .post(`/api/answer/${defaultSurvey.url}`)
       .send(data)
-      .set('Cookie', cookie)
-      .expect(httpStatus.CREATED);
-    expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('data');
-    expect(res.body.data).to.be.an('object');
+      .expect(httpStatus.CREATED)
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body).has.own.property('data');
+        expect(res.body.data).to.be.an('object');
+        expect(JSON.stringify(res.body.data)).eq(JSON.stringify(data));
+      });
   });
   it('GET api/answer/:url/:id', async () => {
-    const res = await request(app)
+    await agent
       .get(`/api/answer/${defaultSurvey.url}/${answer.id}`)
-      .set('Cookie', cookie)
-      .expect(httpStatus.OK);
-    expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('data');
-    expect(res.body.data).to.be.an('object');
+      .send()
+      .expect(httpStatus.OK)
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body).has.own.property('data');
+        expect(res.body.data).to.be.an('object');
+        expect(JSON.stringify(res.body.data)).eq(JSON.stringify(answer.data));
+      });
   });
   it('GET api/answer', async () => {
-    const res = await request(app)
+    await agent
       .get(`/api/answer/${survey.url}`)
-      .set('Cookie', cookie)
-      .expect(httpStatus.OK);
-    expect(res.body).to.be.an('array').to.have.lengthOf(1);
+      .send()
+      .expect(httpStatus.OK)
+      .expect((res) => {
+        expect(res.body).to.be.an('array').to.have.lengthOf(1);
+        expect(JSON.stringify(res.body[0])).eq(JSON.stringify(answer));
+      });
   });
 });

@@ -58,11 +58,23 @@ async function loginUser() {
   return cookie;
 }
 
+async function loginUserAgent() {
+  const agent = request.agent(app);
+  await agent
+    .post('/api/auth/login')
+    .send({
+      email: defaultUser.email,
+      password: defaultUser.password
+    });
+  return agent;
+}
+
 export {
   userAuth,
   createUser,
   newUser,
   defaultUser,
   createDefaultUser,
-  loginUser
+  loginUser,
+  loginUserAgent
 };
