@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack --watch",
     "dev": "nodemon --inspect src/index.js",
-    "test": "mocha --reporter nyan --require @babel/polyfill --require @babel/register ./test/auth.test/*.js"
+    "test": "nodemon --exec  mocha --reporter nyan --require @babel/polyfill --require @babel/register ./test/*.test/*.js"
   },
   "author": "Bohdan Yaskevych",
   "license": "ISC",
@@ -40,6 +40,7 @@
     "eslint": "^7.21.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-mocha": "^8.1.0",
+    "faker": "^5.5.3",
     "mocha": "^8.3.2",
     "mocha-loader": "4.0.0",
     "mocha-webpack": "^1.1.0",

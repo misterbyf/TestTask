@@ -1,7 +1,6 @@
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import dotEnv from 'dotenv';
 import User from '../models/User';
-import {use} from "chai/index";
 dotEnv.config();
 
 const options = {

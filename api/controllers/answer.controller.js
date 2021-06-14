@@ -4,7 +4,7 @@ import Survey from '../models/Survey';
 
 async function createAnswer(req, res, next) {
   try {
-    const { _id } = req.user;
+    const { id } = req.user;
     const { url } = req.params;
     const data = req.body;
     const survey = await Survey.findOne({ url });
@@ -19,8 +19,8 @@ async function createAnswer(req, res, next) {
       });
     }
     const answer = new Answer({
-      user: _id,
-      survey: survey._id,
+      user: id,
+      survey: survey.id,
       data
     });
     const result = await answer.save();
@@ -30,27 +30,45 @@ async function createAnswer(req, res, next) {
   }
 }
 
-function getAnswer(req, res) {
-  res.status(200).json({
-    surveyAnswer: 'showSurveyAnswer'
-  });
+async function getAnswer(req, res, next) {
+  try {
+    const { url, id } = req.params;
+    const survey = await Survey.findOne({ url });
+    if (!survey) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        message: 'Survey with same email not found.'
+      });
+    }
+    const answer = await Answer.findById(id);
+    if (!answer) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        message: 'Answer with same id not found.'
+      });
+    }
+    return res.status(200).json(answer);
+  } catch (error) {
+    return next(error);
+  }
 }
 
-function getAnswers(req, res) {
-  res.status(200).json({
-    surveyAnswer: 'listSurveyAnswer'
-  });
-}
-
-async function removeAnswer(req, res, next) {
-  const { id } = req.params.id;
-  const result = await Answer.remove(id);
-  res.status(200).json(result);
+async function getAnswers(req, res, next) {
+  try {
+    const { url } = req.params;
+    const survey = await Survey.findOne({ url });
+    const answer = await Answer.find({ survey: survey._id });
+    if (!survey) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        message: 'Survey with same email not found.'
+      });
+    }
+    return res.status(httpStatus.OK).json(answer);
+  } catch (error) {
+    return next(error);
+  }
 }
 
 export {
   createAnswer,
   getAnswer,
-  getAnswers,
-  removeAnswer
+  getAnswers
 };

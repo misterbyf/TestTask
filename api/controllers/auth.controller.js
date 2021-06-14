@@ -25,9 +25,7 @@ async function login(req, res, next) {
     return res
       .cookie('jwt', token, { signed: true, httpOnly: true })
       .status(httpStatus.OK)
-      .json({
-        token: `Bearer ${token}`
-      });
+      .json(user);
   } catch (error) {
     return next(error);
   }
@@ -64,13 +62,11 @@ async function googleAuthorization(req, res, next) {
       userId: user._id,
       email: user.email
     }, SECRET_KEY, { expiresIn: 60 * 60 });
-    await redisClient.set(token.toString(), user._id.toString(), 'EX', 60 * 60);
+    await redisClient.set(token.toString(), user.id.toString(), 'EX', 60 * 60);
     return res
       .cookie('jwt', token, { signed: true, httpOnly: true })
       .status(httpStatus.OK)
-      .json({
-        token: `Bearer ${token}`
-      });
+      .json(user);
   } catch (error) {
     return next(error);
   }

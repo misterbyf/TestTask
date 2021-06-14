@@ -5,6 +5,12 @@ const reqString = {
   required: true
 };
 
+const reqUrl = {
+  type: String,
+  required: true,
+  unique: true
+};
+
 const questionSchema = new Schema({
   name: {
     type: String
@@ -13,7 +19,7 @@ const questionSchema = new Schema({
 
 const surveySchema = new Schema({
   name: reqString,
-  url: reqString,
+  url: reqUrl,
   questions: [questionSchema]
 });
 

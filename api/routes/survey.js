@@ -1,5 +1,5 @@
 import express from 'express';
-import passport from 'passport';
+import middlewarePassportJwt from '../middleware/middleware.passport.jwt';
 import {
   getSurvey,
   updateSurvey,
@@ -9,9 +9,9 @@ import {
 const router = express.Router();
 
 router.route('/:id')
-  .get(passport.authenticate('jwt', { session: false }), getSurvey)
-  .delete(passport.authenticate('jwt', { session: false }), removeSurvey)
-  .put(passport.authenticate('jwt', { session: false }), updateSurvey);
-router.post('/', passport.authenticate('jwt', { session: false }), createSurvey);
+  .get(middlewarePassportJwt, getSurvey)
+  .delete(middlewarePassportJwt, removeSurvey)
+  .put(middlewarePassportJwt, updateSurvey);
+router.post('/', middlewarePassportJwt, createSurvey);
 
 export default router;
