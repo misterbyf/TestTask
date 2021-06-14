@@ -10,8 +10,8 @@ import app from '../../src/index';
 import {
   newUser,
   createUser,
-  createDeafultUser,
-  loginUser
+  createDefaultUser,
+  loginUser, defaultUser
 } from '../../utils/init.data.user';
 import clearCollections from '../../utils/clear.collections';
 
@@ -19,23 +19,26 @@ let cookie;
 let user;
 
 describe('/user', () => {
+  const agent = request.agent(app);
   beforeEach(async () => {
     await clearCollections();
-    user = await createDeafultUser();
+    user = await createDefaultUser();
     cookie = await loginUser();
   });
   it('POST api/user/', async () => {
-    const res = await request(app)
+    await agent
       .post('/api/user')
       .send(createUser)
       .set('Cookie', cookie)
-      .expect(httpStatus.CREATED);
-    expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('name');
-    expect(res.body).has.own.property('email');
+      .expect(httpStatus.CREATED)
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body).has.own.property('name').eq(createUser.name);
+        expect(res.body).has.own.property('email').eq(createUser.email);
+      });
   });
   it('PUT api/user/:id', async () => {
-    const res = await request(app)
+    await agent
       .put(`/api/user/${user.id}`)
       .send({
         name: newUser.name,
@@ -43,18 +46,23 @@ describe('/user', () => {
         password: newUser.password
       })
       .set('Cookie', cookie)
-      .expect(httpStatus.OK);
-    expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('n').eq(1);
-    expect(res.body).has.own.property('ok').eq(1);
+      .expect(httpStatus.OK)
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body).has.own.property('n').eq(1);
+        expect(res.body).has.own.property('ok').eq(1);
+      });
   });
   it('GET api/user/:id', async () => {
-    const res = await request(app)
+    await agent
       .get(`/api/user/${user.id}`)
+      .send()
       .set('Cookie', cookie)
-      .expect(httpStatus.OK);
-    expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('name');
-    expect(res.body).has.own.property('email');
+      .expect(httpStatus.OK)
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body).has.own.property('name').eq(defaultUser.name);
+        expect(res.body).has.own.property('email').eq(defaultUser.email);
+      });
   });
 });

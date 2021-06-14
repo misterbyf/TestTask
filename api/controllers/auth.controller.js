@@ -59,7 +59,7 @@ async function googleAuthorization(req, res, next) {
       return res.status(httpStatus.NOT_FOUND).json({ message: 'User does not exist.' });
     }
     const token = jwt.sign({
-      userId: user.id,
+      userId: user._id,
       email: user.email
     }, SECRET_KEY, { expiresIn: 60 * 60 });
     await redisClient.set(token.toString(), user.id.toString(), 'EX', 60 * 60);

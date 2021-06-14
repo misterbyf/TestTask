@@ -1,66 +1,64 @@
-import request from 'supertest';
-import app from '../src';
-import httpStatus from 'http-status';
+import faker from 'faker';
 import Survey from '../models/Survey';
 
 const defaultSurvey = {
-  name: 'Something9',
-  url: 'something-defautl.url',
+  name: faker.lorem.word(),
+  url: faker.lorem.word(),
   questions: [
     {
-      name: 'NameOfQuestion4'
+      name: faker.lorem.word()
     },
     {
-      name: 'NameOfQuestion3'
+      name: faker.lorem.word()
     },
     {
-      name: 'NameOfQuestion2'
+      name: faker.lorem.word()
     },
     {
-      name: 'NameOfQuestion1'
+      name: faker.lorem.word()
     }
   ]
 };
 
 const createSurvey = {
-  name: 'Something9',
-  url: 'something-create.url',
+  name: faker.lorem.word(),
+  url: faker.lorem.word(),
   questions: [
     {
-      name: 'NameOfQuestion1'
+      name: faker.lorem.word()
     },
     {
-      name: 'NameOfQuestion2'
+      name: faker.lorem.word()
     },
     {
-      name: 'NameOfQuestion3'
+      name: faker.lorem.word()
     },
     {
-      name: 'NameOfQuestion4'
+      name: faker.lorem.word()
     }
   ]
 };
 
 const updateSurvey = {
-  name: 'Something10',
-  url: 'something-update.url',
+  name: faker.lorem.word(),
+  url: faker.lorem.word(),
   questions: [
     {
-      name: 'NameOfQuestion2'
+      name: faker.lorem.word()
     },
     {
-      name: 'NameOfQuestion4'
+      name: faker.lorem.word()
     },
     {
-      name: 'NameOfQuestion5'
+      name: faker.lorem.word()
     },
     {
-      name: 'NameOfQuestion6'
+      name: faker.lorem.word()
     }
   ]
 };
 
-async function createDeafultSurvey() {
+async function createDefaultSurvey() {
   try {
     const survey = new Survey(defaultSurvey);
     await survey.save();
@@ -74,5 +72,5 @@ export {
   createSurvey,
   updateSurvey,
   defaultSurvey,
-  createDeafultSurvey
+  createDefaultSurvey
 };

@@ -1,11 +1,11 @@
 import express from 'express';
-import passport from 'passport';
-import {createAnswer, getAnswer, getAnswers, removeAnswer} from '../controllers/answer.controller';
+import middlewarePassportJwt from '../middleware/middleware.passport.jwt';
+import { createAnswer, getAnswer, getAnswers } from '../controllers/answer.controller';
 const router = express.Router();
 
 router.route('/:url')
-  .post(passport.authenticate('jwt', { session: false }), createAnswer)
-  .get(passport.authenticate('jwt', { session: false }), getAnswers);
-router.get('/:url/:id', passport.authenticate('jwt', { session: false }), getAnswer);
+  .post(middlewarePassportJwt, createAnswer)
+  .get(middlewarePassportJwt, getAnswers);
+router.get('/:url/:id', middlewarePassportJwt, getAnswer);
 
 export default router;

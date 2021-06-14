@@ -3,32 +3,33 @@ import bCrypt from 'bcrypt';
 import request from 'supertest';
 import app from '../src';
 import httpStatus from 'http-status';
+import faker from 'faker';
 
 const userAuth = {
-  name: 'TestUser',
-  email: 'test@gmail.com',
-  password: '1234567qwe'
+  name: faker.name.firstName(),
+  email: faker.internet.email(),
+  password: faker.internet.password()
 };
 
 const createUser = {
-  name: 'TestUser1',
-  email: 'test1@gmail.com',
-  password: '1234567qwe'
+  name: faker.name.firstName(),
+  email: faker.internet.email(),
+  password: faker.internet.password()
 };
 
 const defaultUser = {
-  name: 'defaultUserName',
-  email: 'defaultUser@gmail.com',
-  password: '12345678qwe'
+  name: faker.name.firstName(),
+  email: faker.internet.email(),
+  password: faker.internet.password()
 };
 
 const newUser = {
-  name: 'NewUser',
-  email: 'newuser@gmail.com',
-  password: '1234567qwe'
+  name: faker.name.firstName(),
+  email: faker.internet.email(),
+  password: faker.internet.password()
 };
 
-async function createDeafultUser() {
+async function createDefaultUser() {
   try {
     const saltRounds = 10;
     const salt = bCrypt.genSaltSync(saltRounds);
@@ -62,6 +63,6 @@ export {
   createUser,
   newUser,
   defaultUser,
-  createDeafultUser,
+  createDefaultUser,
   loginUser
 };

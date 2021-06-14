@@ -8,66 +8,75 @@ import request from 'supertest';
 import httpStatus from 'http-status';
 import app from '../../src/index';
 import clearCollections from '../../utils/clear.collections';
-import { createDeafultUser, loginUser } from '../../utils/init.data.user';
+import { createDefaultUser, loginUser } from '../../utils/init.data.user';
 import {
   createSurvey,
   updateSurvey,
-  createDeafultSurvey
+  createDefaultSurvey, defaultSurvey
 } from '../../utils/init.data.survey';
 
 let cookie;
 let survey;
 
 describe('survey', () => {
+  const agent = request.agent(app);
   beforeEach(async () => {
     await clearCollections();
-    await createDeafultUser();
-    survey = await createDeafultSurvey();
+    await createDefaultUser();
+    survey = await createDefaultSurvey();
     cookie = await loginUser();
   });
   it('POST /api/survey', async () => {
-    const res = await request(app)
+    await agent
       .post('/api/survey')
       .send(createSurvey)
       .set('Cookie', cookie)
-      .expect(httpStatus.CREATED);
-    expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('name');
-    expect(res.body).has.own.property('url');
-    expect(res.body).has.own.property('questions');
-    expect(res.body.questions).to.be.an('array').to.have.lengthOf(4);
-    expect(res.body.questions[0]).to.have.own.property('name');
+      .expect(httpStatus.CREATED)
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body).has.own.property('name').eq(createSurvey.name);
+        expect(res.body).has.own.property('url').eq(createSurvey.url);
+        expect(res.body).has.own.property('questions');
+        expect(res.body.questions).to.be.an('array').to.have.lengthOf(4);
+        expect(res.body.questions[0]).to.have.own.property('name').eq(createSurvey.questions[0].name);
+      });
   });
   it('PUT /api/survey/:id', async () => {
-    const res = await request(app)
+    await agent
       .put(`/api/survey/${survey.id}`)
       .send(updateSurvey)
       .set('Cookie', cookie)
-      .expect(httpStatus.OK);
-    expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('n').eq(1);
-    expect(res.body).has.own.property('ok').eq(1);
+      .expect(httpStatus.OK)
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body).has.own.property('n').eq(1);
+        expect(res.body).has.own.property('ok').eq(1);
+      });
   });
   it('GET /api/survey/:id', async () => {
-    const res = await request(app)
+    await agent
       .get(`/api/survey/${survey.id}`)
       .set('Cookie', cookie)
-      .expect(httpStatus.OK);
-    expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('name');
-    expect(res.body).has.own.property('url');
-    expect(res.body).has.own.property('questions');
-    expect(res.body.questions).to.be.an('array').to.have.lengthOf(4);
-    expect(res.body.questions[0]).to.have.own.property('name');
+      .expect(httpStatus.OK)
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body).has.own.property('name').eq(defaultSurvey.name);
+        expect(res.body).has.own.property('url').eq(defaultSurvey.url);
+        expect(res.body).has.own.property('questions');
+        expect(res.body.questions).to.be.an('array').to.have.lengthOf(4);
+        expect(res.body.questions[0]).to.have.own.property('name').eq(defaultSurvey.questions[0].name);
+      });
   });
   it('DELETE /api/survey/:id', async () => {
-    const res = await request(app)
+    await agent
       .delete(`/api/survey/${survey.id}`)
       .set('Cookie', cookie)
-      .expect(httpStatus.OK);
-    expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('n').eq(1);
-    expect(res.body).has.own.property('ok').eq(1);
-    expect(res.body).has.own.property('deletedCount').eq(1);
+      .expect(httpStatus.OK)
+      .expect((res) => {
+        expect(res.body).to.be.an('object');
+        expect(res.body).has.own.property('n').eq(1);
+        expect(res.body).has.own.property('ok').eq(1);
+        expect(res.body).has.own.property('deletedCount').eq(1);
+      });
   });
 });

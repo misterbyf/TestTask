@@ -39,7 +39,7 @@ async function getAnswer(req, res, next) {
         message: 'Survey with same email not found.'
       });
     }
-    const answer = await Answer.findById(id).populate('survey');
+    const answer = await Answer.findById(id);
     if (!answer) {
       return res.status(httpStatus.NOT_FOUND).json({
         message: 'Answer with same id not found.'
@@ -55,7 +55,7 @@ async function getAnswers(req, res, next) {
   try {
     const { url } = req.params;
     const survey = await Survey.findOne({ url });
-    const answer = await Answer.find({}).populate('survey');
+    const answer = await Answer.find({ survey: survey._id });
     if (!survey) {
       return res.status(httpStatus.NOT_FOUND).json({
         message: 'Survey with same email not found.'

@@ -899,7 +899,7 @@ function _updateUser() {
 
 /***/ "./middleware/errorHandler.js":
 /*!************************************!*\
-  !*** ./middleware/errorHandler.js ***!
+  !*** ./middleware/error.handler.js ***!
   \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -980,7 +980,7 @@ function middlewareValidator(schema) {
 
 /***/ "./middleware/passportGoogle.js":
 /*!**************************************!*\
-  !*** ./middleware/passportGoogle.js ***!
+  !*** ./middleware/passport.google.js ***!
   \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -1166,7 +1166,7 @@ function middlewareJwt(passport) {
 
 /***/ "./middleware/schemas.for.validation/authSchema.js":
 /*!*********************************************************!*\
-  !*** ./middleware/schemas.for.validation/authSchema.js ***!
+  !*** ./middleware/schemas.for.validation/auth.schema.js ***!
   \*********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 

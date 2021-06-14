@@ -8,8 +8,8 @@ import request from 'supertest';
 import httpStatus from 'http-status';
 import app from '../../src/index';
 import clearCollections from '../../utils/clear.collections';
-import { createDeafultUser, loginUser } from '../../utils/init.data.user';
-import { createDeafultSurvey, defaultSurvey } from '../../utils/init.data.survey';
+import { createDefaultUser, loginUser } from '../../utils/init.data.user';
+import { createDefaultSurvey, defaultSurvey } from '../../utils/init.data.survey';
 import { createAnswerObject, createDefaultAnswer } from '../../utils/init.data.answer';
 
 let cookie;
@@ -19,8 +19,8 @@ let survey;
 describe('/answer', () => {
   beforeEach(async () => {
     await clearCollections();
-    await createDeafultUser();
-    survey = await createDeafultSurvey();
+    await createDefaultUser();
+    survey = await createDefaultSurvey();
     answer = await createDefaultAnswer();
     cookie = await loginUser();
   });

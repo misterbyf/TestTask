@@ -1,3 +1,4 @@
+import faker from 'faker';
 import User from '../models/User';
 import Survey from '../models/Survey';
 import Answer from '../models/Answer';
@@ -11,7 +12,7 @@ async function createAnswerObject() {
     const survey = await Survey.findOne({ email: defaultSurvey.email });
     survey.questions.map((values, index) => {
       const { id } = values;
-      map.set(id, `something answer ${index}`);
+      map.set(id, faker.lorem.words());
     });
     map.forEach((value, key) => (object[key] = value));
     return object;

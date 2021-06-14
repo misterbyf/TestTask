@@ -5,12 +5,12 @@ import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import morgan from 'morgan';
 import middlewareJwt from '../middleware/passportJWT';
-import middlewareGoogle from '../middleware/passportGoogle';
+import middlewareGoogle from '../middleware/passport.google';
 import authRouter from '../routes/auth';
 import userRouter from '../routes/user';
 import surveyRouter from '../routes/survey';
 import surveyAnswerRouter from '../routes/answer';
-import errorHandler from '../middleware/errorHandler';
+import errorHandler from '../middleware/error.handler';
 
 const PORT = process.env.PORT || 8080;
 const URL = process.env.URL;

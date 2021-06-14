@@ -8,12 +8,12 @@ import request from 'supertest';
 import httpStatus from 'http-status';
 import app from '../../src/index';
 import clearCollections from '../../utils/clear.collections';
-import { userAuth, defaultUser, createDeafultUser } from '../../utils/init.data.user';
+import { userAuth, defaultUser, createDefaultUser } from '../../utils/init.data.user';
 
 describe('/auth', () => {
   beforeEach(async () => {
     await clearCollections();
-    await createDeafultUser();
+    await createDefaultUser();
   });
   it('POST api/auth/register', async () => {
     const res = await request(app)
