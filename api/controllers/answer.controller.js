@@ -6,7 +6,7 @@ async function createAnswer(req, res, next) {
   try {
     const { id } = req.user;
     const { url } = req.params;
-    const data = req.body;
+    const data = req.body.data;
     const survey = await Survey.findOne({ url });
     if (!survey) {
       return res.status(httpStatus.NOT_FOUND).json({
@@ -20,7 +20,7 @@ async function createAnswer(req, res, next) {
     }
     const answer = new Answer({
       user: id,
-      survey: survey.id,
+      survey,
       data
     });
     const result = await answer.save();
@@ -45,7 +45,9 @@ async function getAnswer(req, res, next) {
         message: 'Answer with same id not found.'
       });
     }
-    return res.status(200).json(answer);
+    answer.survey = survey;
+    return res.status(200)
+      .json(answer);
   } catch (error) {
     return next(error);
   }
@@ -55,13 +57,17 @@ async function getAnswers(req, res, next) {
   try {
     const { url } = req.params;
     const survey = await Survey.findOne({ url });
-    const answer = await Answer.find({ survey: survey._id });
+    const answers = await Answer.find({ survey: survey._id });
     if (!survey) {
       return res.status(httpStatus.NOT_FOUND).json({
         message: 'Survey with same email not found.'
       });
     }
-    return res.status(httpStatus.OK).json(answer);
+    const populateAnswers = answers.map((answer) => {
+      answer.survey = survey;
+      return answer;
+    });
+    return res.status(httpStatus.OK).json(populateAnswers);
   } catch (error) {
     return next(error);
   }

@@ -6,7 +6,7 @@ import {
 import { expect } from 'chai/index';
 import httpStatus from 'http-status';
 import clearCollections from '../../utils/clear.collections';
-import { createDefaultUser, defaultUser, loginUserAgent} from '../../utils/init.data.user';
+import { createDefaultUser, loginUserAgent } from '../../utils/init.data.user';
 import { createDefaultSurvey, defaultSurvey } from '../../utils/init.data.survey';
 import { createAnswerObject, createDefaultAnswer } from '../../utils/init.data.answer';
 
@@ -26,7 +26,9 @@ describe('/answer', () => {
     const data = await createAnswerObject();
     await agent
       .post(`/api/answer/${defaultSurvey.url}`)
-      .send(data)
+      .send({
+        data
+      })
       .expect(httpStatus.CREATED)
       .expect((res) => {
         expect(res.body).to.be.an('object');
@@ -53,6 +55,7 @@ describe('/answer', () => {
       .send()
       .expect(httpStatus.OK)
       .expect((res) => {
+        answer.survey = survey;
         expect(res.body).to.be.an('array').to.have.lengthOf(1);
         expect(JSON.stringify(res.body[0])).eq(JSON.stringify(answer));
       });
