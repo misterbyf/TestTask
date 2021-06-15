@@ -8,12 +8,15 @@ import request from 'supertest';
 import httpStatus from 'http-status';
 import app from '../../src/index';
 import clearCollections from '../../utils/clear.collections';
-import { userAuth, defaultUser, createDefaultUser } from '../../utils/init.data.user';
+import {userAuth, defaultUser, createDefaultUser, loginUserAgent} from '../../utils/init.data.user';
+
+let agent;
 
 describe('/auth', () => {
   beforeEach(async () => {
     await clearCollections();
     await createDefaultUser();
+    agent = await loginUserAgent();
   });
   it('POST api/auth/register', async () => {
     const res = await request(app)
@@ -21,8 +24,8 @@ describe('/auth', () => {
       .send(userAuth)
       .expect(httpStatus.CREATED);
     expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('name');
-    expect(res.body).has.own.property('email');
+    expect(res.body).has.own.property('name').eq(userAuth.name);
+    expect(res.body).has.own.property('email').eq(userAuth.email);
   });
   it('POST api/auth/login', async () => {
     const res = await request(app)
@@ -33,7 +36,13 @@ describe('/auth', () => {
       })
       .expect(httpStatus.OK);
     expect(res.body).to.be.an('object');
-    expect(res.body).has.own.property('name');
-    expect(res.body).has.own.property('email');
+    expect(res.body).has.own.property('name').eq(defaultUser.name);
+    expect(res.body).has.own.property('email').eq(defaultUser.email);
+  });
+  it('GET api/auth/logout', async () => {
+    await agent
+      .get('/api/auth/logout')
+      .send()
+      .expect(httpStatus.OK);
   });
 });

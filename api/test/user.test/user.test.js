@@ -4,32 +4,28 @@ import {
   beforeEach
 } from 'mocha';
 import { expect } from 'chai/index';
-import request from 'supertest';
 import httpStatus from 'http-status';
-import app from '../../src/index';
 import {
   newUser,
   createUser,
   createDefaultUser,
-  loginUser, defaultUser
+  defaultUser, loginUserAgent
 } from '../../utils/init.data.user';
 import clearCollections from '../../utils/clear.collections';
 
-let cookie;
 let user;
+let agent;
 
 describe('/user', () => {
-  const agent = request.agent(app);
   beforeEach(async () => {
     await clearCollections();
     user = await createDefaultUser();
-    cookie = await loginUser();
+    agent = await loginUserAgent();
   });
   it('POST api/user/', async () => {
     await agent
       .post('/api/user')
       .send(createUser)
-      .set('Cookie', cookie)
       .expect(httpStatus.CREATED)
       .expect((res) => {
         expect(res.body).to.be.an('object');
@@ -45,7 +41,6 @@ describe('/user', () => {
         email: newUser.email,
         password: newUser.password
       })
-      .set('Cookie', cookie)
       .expect(httpStatus.OK)
       .expect((res) => {
         expect(res.body).to.be.an('object');
@@ -57,7 +52,6 @@ describe('/user', () => {
     await agent
       .get(`/api/user/${user.id}`)
       .send()
-      .set('Cookie', cookie)
       .expect(httpStatus.OK)
       .expect((res) => {
         expect(res.body).to.be.an('object');

@@ -4,33 +4,30 @@ import {
   beforeEach
 } from 'mocha';
 import { expect } from 'chai/index';
-import request from 'supertest';
 import httpStatus from 'http-status';
-import app from '../../src/index';
 import clearCollections from '../../utils/clear.collections';
-import { createDefaultUser, loginUser } from '../../utils/init.data.user';
+import { createDefaultUser, loginUserAgent } from '../../utils/init.data.user';
 import {
   createSurvey,
   updateSurvey,
-  createDefaultSurvey, defaultSurvey
+  createDefaultSurvey,
+  defaultSurvey
 } from '../../utils/init.data.survey';
 
-let cookie;
 let survey;
+let agent;
 
 describe('survey', () => {
-  const agent = request.agent(app);
   beforeEach(async () => {
     await clearCollections();
     await createDefaultUser();
     survey = await createDefaultSurvey();
-    cookie = await loginUser();
+    agent = await loginUserAgent();
   });
   it('POST /api/survey', async () => {
     await agent
       .post('/api/survey')
       .send(createSurvey)
-      .set('Cookie', cookie)
       .expect(httpStatus.CREATED)
       .expect((res) => {
         expect(res.body).to.be.an('object');
@@ -45,7 +42,6 @@ describe('survey', () => {
     await agent
       .put(`/api/survey/${survey.id}`)
       .send(updateSurvey)
-      .set('Cookie', cookie)
       .expect(httpStatus.OK)
       .expect((res) => {
         expect(res.body).to.be.an('object');
@@ -56,7 +52,6 @@ describe('survey', () => {
   it('GET /api/survey/:id', async () => {
     await agent
       .get(`/api/survey/${survey.id}`)
-      .set('Cookie', cookie)
       .expect(httpStatus.OK)
       .expect((res) => {
         expect(res.body).to.be.an('object');
@@ -70,7 +65,6 @@ describe('survey', () => {
   it('DELETE /api/survey/:id', async () => {
     await agent
       .delete(`/api/survey/${survey.id}`)
-      .set('Cookie', cookie)
       .expect(httpStatus.OK)
       .expect((res) => {
         expect(res.body).to.be.an('object');
