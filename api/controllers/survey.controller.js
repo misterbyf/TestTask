@@ -1,6 +1,9 @@
-import Survey from '../models/Survey';
 import httpStatus from 'http-status';
 
+import Survey from '../models/Survey';
+
+
+// TODO comments
 async function createSurvey(req, res, next) {
   try {
     const {
@@ -8,18 +11,23 @@ async function createSurvey(req, res, next) {
       url,
       questions
     } = req.body;
+
     const result = await Survey.findOne({ url });
+
     if (result) {
       return res.status(httpStatus.BAD_REQUEST).json({
         message: 'Survey with same email already exist.'
       });
     }
+
     const survey = new Survey({
       name,
       url,
       questions
     });
+
     await survey.save();
+
     return res.status(httpStatus.CREATED).json(survey);
   } catch (error) {
     return next(error);
@@ -51,14 +59,17 @@ async function updateSurvey(req, res, next) {
     if (!survey) {
       return res.status(httpStatus.NOT_FOUND).json({ message: 'Survey with same id not found.' });
     }
-    const reloadSurvey = await Survey.updateOne({ _id: id }, {
-      $set: {
-        name,
-        url,
-        questions
-      }
-    });
-    return res.status(httpStatus.OK).json(reloadSurvey);
+
+    // TODO check url on uniq
+    // TODO test remove questions add new questions
+
+    Object.assign(survey, { name, url, questions })
+
+    await survey.save();
+
+    const reloadedSurvey = await Survey.findById(id);
+
+    return res.status(httpStatus.OK).json(reloadedSurvey);
   } catch (error) {
     return next(error);
   }
@@ -71,7 +82,14 @@ async function removeSurvey(req, res, next) {
     if (!survey) {
       return res.status(httpStatus.NOT_FOUND).json({ message: 'Survey with same id not found.' });
     }
-    const result = await Survey.remove({ _id: id });
+
+    await survey.remove();
+
+    // const result = await Survey.remove({ _id: id });
+
+    // TODO return status NO_CONTENT
+    // TODO in tests after request reload survey from database and check existence
+
     return res.status(httpStatus.OK).json(result);
   } catch (error) {
     return next(error);

@@ -36,10 +36,15 @@ function updateSurveySchema(Joi) {
   });
 }
 
+forEach(key => )
+shcema[key].validate(req[key])
+
+schema.validate({ params, query, body })
+
 function createSurveySchema(Joi) {
   return Joi.object().keys({
     query: {},
-    params: {},
+    params: Joi.object(),
     body: {
       name: Joi.string().required(),
       url: Joi.string().trim().required(),

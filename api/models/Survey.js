@@ -23,4 +23,18 @@ const surveySchema = new Schema({
   questions: [questionSchema]
 });
 
+
+Survey.schema.pre('remove', async function (next) {
+  try {
+    const answer = await Answer.find({ survey });
+
+    this.
+
+    remove({ session })
+
+    next()
+  } catch (e) {
+    return next(e);
+  }
+})
 export default mongoose.model('Survey', surveySchema);

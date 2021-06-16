@@ -13,17 +13,21 @@ async function createAnswer(req, res, next) {
         message: 'Survey not found.'
       });
     }
-    if (!data) {
-      return res.status(httpStatus.BAD_REQUEST).json({
-        message: 'Data is empty.'
-      });
-    }
+    // if (!data) {
+    //   return res.status(httpStatus.BAD_REQUEST).json({
+    //     message: 'Data is empty.'
+    //   });
+    // }
     const answer = new Answer({
       user: id,
       survey,
       data
     });
+
     await answer.save();
+
+    // TODO reload
+
     return res.status(httpStatus.CREATED).json(answer);
   } catch (error) {
     return next(error);

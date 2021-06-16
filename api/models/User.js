@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
+// TODO move to model
 const reqString = {
   type: String,
   required: true

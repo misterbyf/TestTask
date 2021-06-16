@@ -27,7 +27,7 @@ describe('survey', () => {
   it('POST /api/survey', async () => {
     await agent
       .post('/api/survey')
-      .send(createSurvey)
+      .send()
       .expect(httpStatus.CREATED)
       .expect((res) => {
         expect(res.body).to.be.an('object');

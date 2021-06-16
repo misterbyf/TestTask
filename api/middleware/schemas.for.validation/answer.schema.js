@@ -25,9 +25,7 @@ function createAnswerSchema(Joi) {
     params: {
       url: Joi.string().trim().required()
     },
-    body: {
-      data: Joi.object().required()
-    }
+    body: Joi.array().items(Joi.object({ questionId: Joi.string(), answer: Joi.string() })).required()
   });
 }
 
