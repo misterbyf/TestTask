@@ -1,20 +1,4 @@
-function loginSchema(Joi) {
-  return Joi.object().keys({
-    query: {},
-    params: {},
-    body: {
-      email: Joi.string().trim().email().required(),
-      password: Joi
-        .string()
-        .trim()
-        .min(5)
-        .max(16)
-        .required()
-    }
-  });
-}
-
-function registerSchema(Joi) {
+function createUserSchema(Joi) {
   return Joi.object().keys({
     query: {},
     params: {},
@@ -30,7 +14,36 @@ function registerSchema(Joi) {
   });
 }
 
+function getUserSchema(Joi) {
+  return Joi.object().keys({
+    query: {},
+    params: {
+      id: Joi.string().trim().required()
+    },
+    body: {}
+  });
+}
+
+function updateUserSchema(Joi) {
+  return Joi.object().keys({
+    query: {},
+    params: {
+      id: Joi.string().trim().required()
+    },
+    body: {
+      name: Joi.string().required(),
+      email: Joi.string().trim().email().required(),
+      password: Joi.string()
+        .trim()
+        .min(5)
+        .max(16)
+        .required()
+    }
+  });
+}
+
 export {
-  loginSchema,
-  registerSchema
+  createUserSchema,
+  getUserSchema,
+  updateUserSchema
 };

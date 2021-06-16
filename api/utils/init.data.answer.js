@@ -10,7 +10,7 @@ async function createAnswerObject() {
     const object = {};
     const map = new Map();
     const survey = await Survey.findOne({ email: defaultSurvey.email });
-    survey.questions.map((values, index) => {
+    survey.questions.map((values) => {
       const { id } = values;
       map.set(id, faker.lorem.words());
     });

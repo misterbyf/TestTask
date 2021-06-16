@@ -1,9 +1,15 @@
 import express from 'express';
 import passport from 'passport';
-import { googleAuthorization, login, logout, register } from '../controllers/auth.controller';
+import {
+  googleAuthorization,
+  login,
+  logout,
+  register
+} from '../controllers/auth.controller';
 import { loginSchema, registerSchema } from '../middleware/schemas.for.validation/auth.schema';
 import middlewareValidator from '../middleware/middleware.validator';
 import middlewarePassportJwt from '../middleware/middleware.passport.jwt';
+
 const router = express.Router();
 
 router.post('/login', middlewareValidator(loginSchema), login);
