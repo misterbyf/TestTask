@@ -23,8 +23,8 @@ async function createAnswer(req, res, next) {
       survey,
       data
     });
-    const result = await answer.save();
-    return res.status(httpStatus.CREATED).json(result);
+    await answer.save();
+    return res.status(httpStatus.CREATED).json(answer);
   } catch (error) {
     return next(error);
   }
@@ -57,17 +57,13 @@ async function getAnswers(req, res, next) {
   try {
     const { url } = req.params;
     const survey = await Survey.findOne({ url });
-    const answers = await Answer.find({ survey: survey._id });
     if (!survey) {
       return res.status(httpStatus.NOT_FOUND).json({
         message: 'Survey with same email not found.'
       });
     }
-    const populateAnswers = answers.map((answer) => {
-      answer.survey = survey;
-      return answer;
-    });
-    return res.status(httpStatus.OK).json(populateAnswers);
+    const answers = await Answer.find({ survey: survey._id }).populate('survey');
+    return res.status(httpStatus.OK).json(answers);
   } catch (error) {
     return next(error);
   }
