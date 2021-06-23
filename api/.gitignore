@@ -2,8 +2,13 @@
 
 # dependencies
 /node_modules
+/data
+webpack_modules/
+/dist
 
+.babelrc
 .idea
-.env.local
+.env
 .eslintrc.json
 package-lock.json
+webpack.config.js
