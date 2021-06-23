@@ -9,7 +9,9 @@ import Survey from '../models/Survey';
 async function createAnswer(req, res, next) {
   try {
     const { id } = req.user;
+    
     const { url } = req.params;
+    
     const data = req.body.data;
 
     const survey = await Survey.findOne({ url });
