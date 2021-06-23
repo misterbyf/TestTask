@@ -1,5 +1,5 @@
 import passport from 'passport';
-import httpStatus from 'http-status';
+import httpStatus from 'http-status-codes';
 
 export default function middlewarePassportJwt(req, res, next) {
   return passport.authenticate('jwt', { session: false }, (error, user) => {

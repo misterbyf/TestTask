@@ -31,13 +31,12 @@ function updateUserSchema(Joi) {
       id: Joi.string().trim().required()
     },
     body: {
-      name: Joi.string().required(),
-      email: Joi.string().trim().email().required(),
+      name: Joi.string(),
+      email: Joi.string().trim().email(),
       password: Joi.string()
         .trim()
         .min(5)
         .max(16)
-        .required()
     }
   });
 }

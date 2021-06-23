@@ -1,7 +1,8 @@
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import dotEnv from 'dotenv';
-import User from '../models/User';
 dotEnv.config();
+
+import User from '../models/User';
 
 const options = {
   clientID: process.env.GOOGLE_CLIENT_ID,

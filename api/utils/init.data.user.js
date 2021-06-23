@@ -1,80 +1,52 @@
-import User from '../models/User';
-import bCrypt from 'bcrypt';
 import request from 'supertest';
 import app from '../src';
-import httpStatus from 'http-status';
 import faker from 'faker';
 
-const userAuth = {
-  name: faker.name.firstName(),
-  email: faker.internet.email(),
-  password: faker.internet.password()
-};
+import User from '../models/User';
 
-const createUser = {
-  name: faker.name.firstName(),
-  email: faker.internet.email(),
-  password: faker.internet.password()
-};
+function createUserObject(data = {}) {
+  const user = {
+    name: data.name || faker.name.firstName(),
+    email: data.email || faker.internet.email(),
+    password: data.password || faker.internet.password()
+  };
 
-const defaultUser = {
-  name: faker.name.firstName(),
-  email: faker.internet.email(),
-  password: faker.internet.password()
-};
+  return user;
+}
 
-const newUser = {
-  name: faker.name.firstName(),
-  email: faker.internet.email(),
-  password: faker.internet.password()
-};
-
-async function createDefaultUser() {
+async function createDefaultUser(data = {}) {
   try {
-    const saltRounds = 10;
-    const salt = bCrypt.genSaltSync(saltRounds);
-    const { name, email, password } = defaultUser;
+    const { name, email, password } = data;
+
     const user = new User({
       name,
       email,
-      password: bCrypt.hashSync(password, salt)
+      password
     });
+
     await user.save();
+
     return user;
   } catch (error) {
     return console.warn(error);
   }
 }
 
-async function loginUser() {
-  const res = await request(app)
-    .post('/api/auth/login')
-    .send({
-      email: defaultUser.email,
-      password: defaultUser.password
-    })
-    .expect(httpStatus.OK);
-  const cookie = res.headers['set-cookie'].pop().split(';')[0];
-  return cookie;
-}
-
-async function loginUserAgent() {
+async function loginUserAgent(data = {}) {
   const agent = request.agent(app);
+
   await agent
     .post('/api/auth/login')
     .send({
-      email: defaultUser.email,
-      password: defaultUser.password
+      email: data.email,
+      password: data.password
     });
+
   return agent;
 }
 
 export {
-  userAuth,
-  createUser,
-  newUser,
-  defaultUser,
+  createUserObject,
   createDefaultUser,
-  loginUser,
   loginUserAgent
 };

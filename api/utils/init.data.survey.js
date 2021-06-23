@@ -1,67 +1,37 @@
 import faker from 'faker';
+
 import Survey from '../models/Survey';
 
-const defaultSurvey = {
-  name: faker.lorem.word(),
-  url: faker.lorem.word(),
-  questions: [
-    {
-      name: faker.lorem.word()
-    },
-    {
-      name: faker.lorem.word()
-    },
-    {
-      name: faker.lorem.word()
-    },
-    {
-      name: faker.lorem.word()
-    }
-  ]
-};
+function createSurveyObject(data = {}) {
+  const survey = {
+    name: data.name || faker.lorem.word(),
+    url: data.url || faker.lorem.word(),
+    questions: data.questions || [
+      {
+        name: faker.lorem.word()
+      },
+      {
+        name: faker.lorem.word()
+      },
+      {
+        name: faker.lorem.word()
+      },
+      {
+        name: faker.lorem.word()
+      }
+    ]
+  };
+  return survey;
+}
 
-const createSurvey = {
-  name: faker.lorem.word(),
-  url: faker.lorem.word(),
-  questions: [
-    {
-      name: faker.lorem.word()
-    },
-    {
-      name: faker.lorem.word()
-    },
-    {
-      name: faker.lorem.word()
-    },
-    {
-      name: faker.lorem.word()
-    }
-  ]
-};
-
-const updateSurvey = {
-  name: faker.lorem.word(),
-  url: faker.lorem.word(),
-  questions: [
-    {
-      name: faker.lorem.word()
-    },
-    {
-      name: faker.lorem.word()
-    },
-    {
-      name: faker.lorem.word()
-    },
-    {
-      name: faker.lorem.word()
-    }
-  ]
-};
-
-async function createDefaultSurvey() {
+async function createDefaultSurvey(data = {}) {
   try {
-    const survey = new Survey(defaultSurvey);
+    const surveyObj = data;
+
+    const survey = new Survey(surveyObj);
+
     await survey.save();
+
     return survey;
   } catch (error) {
     return console.warn(error);
@@ -69,8 +39,6 @@ async function createDefaultSurvey() {
 }
 
 export {
-  createSurvey,
-  updateSurvey,
-  defaultSurvey,
+  createSurveyObject,
   createDefaultSurvey
 };

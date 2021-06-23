@@ -1,37 +1,44 @@
 import faker from 'faker';
-import User from '../models/User';
-import Survey from '../models/Survey';
-import Answer from '../models/Answer';
-import { defaultUser } from './init.data.user';
-import { defaultSurvey } from './init.data.survey';
+import mongoose from 'mongoose';
 
-async function createAnswerObject() {
+import Answer from '../models/Answer';
+
+function createAnswerObject(data = {}) {
   try {
     const object = {};
+
     const map = new Map();
-    const survey = await Survey.findOne({ email: defaultSurvey.email });
-    survey.questions.map((values) => {
+
+    data.survey.questions.map((values) => {
       const { id } = values;
+
       map.set(id, faker.lorem.words());
     });
+
     map.forEach((value, key) => (object[key] = value));
+
     return object;
   } catch (error) {
     return console.warn(error);
   }
 }
 
-async function createDefaultAnswer() {
+async function createDefaultAnswer(data = {}) {
   try {
-    const user = await User.findOne({ email: defaultUser.email });
-    const survey = await Survey.findOne({ url: defaultSurvey.url });
-    const data = await createAnswerObject();
+    const user = data.user._id || mongoose.Types.ObjectId();
+
+    const survey = data.survey._id || mongoose.Types.ObjectId();
+
+    const answerObject = await createAnswerObject({ survey: data.survey });
+
     const answer = new Answer({
-      user: user.id,
-      survey: survey.id,
-      data
+      user: user,
+      survey: survey,
+      data: answerObject
     });
+
     await answer.save();
+
     return answer;
   } catch (error) {
     return console.warn(error.message);

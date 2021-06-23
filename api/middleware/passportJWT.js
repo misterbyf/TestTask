@@ -1,8 +1,10 @@
 import { Strategy as JWTStrategy } from 'passport-jwt';
 import dotEnv from 'dotenv';
-import User from '../models/User';
 import redisClient from '../utils/init.redis';
 dotEnv.config();
+
+import User from '../models/User';
+
 const SECRET_KEY = process.env.JWT;
 
 const cookieExtractor = (req) => {

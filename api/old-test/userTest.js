@@ -4,14 +4,14 @@ import {
   beforeEach
 } from 'mocha';
 import { expect } from 'chai/index';
-import httpStatus from 'http-status';
+import httpStatus from 'http-status-codes';
 import {
   newUser,
   createUser,
   createDefaultUser,
   defaultUser, loginUserAgent
-} from '../../utils/init.data.user';
-import clearCollections from '../../utils/clear.collections';
+} from '../utils/init.data.user';
+import clearCollections from '../utils/clear.collections';
 
 let user;
 let agent;

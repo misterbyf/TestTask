@@ -1,18 +1,18 @@
-import {
-  describe,
-  it,
-  beforeEach
-} from 'mocha';
-import { expect } from 'chai/index';
-import httpStatus from 'http-status';
-import clearCollections from '../../utils/clear.collections';
-import { createDefaultUser, loginUserAgent } from '../../utils/init.data.user';
-import {
-  createSurvey,
-  updateSurvey,
-  createDefaultSurvey,
-  defaultSurvey
-} from '../../utils/init.data.survey';
+// import {
+//   describe,
+//   it,
+//   beforeEach
+// } from 'mocha';
+// import { expect } from 'chai/index';
+// import httpStatus from 'http-status-codes';
+// import clearCollections from '../utils/clear.collections';
+// import { createDefaultUser, loginUserAgent } from '../utils/init.data.user';
+// import {
+//   createSurvey,
+//   updateSurvey,
+//   createDefaultSurvey,
+//   defaultSurvey
+// } from '../utils/init.data.survey';
 
 let survey;
 let agent;

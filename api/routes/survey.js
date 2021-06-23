@@ -1,12 +1,12 @@
 import express from 'express';
 import middlewarePassportJwt from '../middleware/middleware.passport.jwt';
+import middlewareValidator from '../middleware/middleware.validator';
 import {
   getSurvey,
   updateSurvey,
   removeSurvey,
   createSurvey
 } from '../controllers/survey.controller';
-import middlewareValidator from '../middleware/middleware.validator';
 import {
   createSurveySchema,
   getSurveySchema,
@@ -19,6 +19,7 @@ router.route('/:id')
   .get(middlewarePassportJwt, middlewareValidator(getSurveySchema), getSurvey)
   .delete(middlewarePassportJwt, middlewareValidator(removeSurveySchema), removeSurvey)
   .put(middlewarePassportJwt, middlewareValidator(updateSurveySchema), updateSurvey);
-router.post('/', middlewarePassportJwt, middlewareValidator(createSurveySchema), createSurvey);
+router.route('/')
+  .post(middlewarePassportJwt, middlewareValidator(createSurveySchema), createSurvey);
 
 export default router;
