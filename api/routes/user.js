@@ -9,6 +9,7 @@ const router = express.Router();
 router.route('/:id')
   .get(middlewarePassportJwt, middlewareValidator(getUserSchema), getUser)
   .put(middlewarePassportJwt, middlewareValidator(updateUserSchema), updateUser);
+
 router.route('/')
   .post(middlewarePassportJwt, middlewareValidator(createUserSchema), createUser);
 
