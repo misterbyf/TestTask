@@ -22,6 +22,7 @@ const userSchema = new Schema({
 userSchema.pre('save', function (next) {
   if (this.isNew && this.password) {
     const salt = bCrypt.genSaltSync(parseInt(SALT_ROUNDS, 10));
+    
     this.password = bCrypt.hashSync(this.password, salt);
   }
   next();
