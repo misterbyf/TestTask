@@ -43,7 +43,6 @@ async function login(req, res, next) {
 
     return res
       .cookie('jwt', token, { signed: true, httpOnly: true })
-      .status(httpStatus.OK)
       .json(user);
   } catch (error) {
     return next(error);
