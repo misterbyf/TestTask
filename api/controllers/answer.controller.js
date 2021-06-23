@@ -15,7 +15,8 @@ async function createAnswer(req, res, next) {
     const survey = await Survey.findOne({ url });
 
     if (!survey) {
-      return res.status(httpStatus.NOT_FOUND)
+      return res
+        .status(httpStatus.NOT_FOUND)
         .json({
           message: 'Survey not found.'
         });
@@ -32,13 +33,15 @@ async function createAnswer(req, res, next) {
     const reloadAnswer = await Answer.findById(answer._id);
 
     if (!reloadAnswer) {
-      return res.status(httpStatus.NOT_FOUND)
+      return res
+        .status(httpStatus.NOT_FOUND)
         .json({
           message: 'Answer was not created..'
         });
     }
 
-    return res.status(httpStatus.CREATED)
+    return res
+      .status(httpStatus.CREATED)
       .json(reloadAnswer);
   } catch (error) {
     return next(error);
@@ -55,7 +58,8 @@ async function getAnswer(req, res, next) {
     const survey = await Survey.findOne({ url });
 
     if (!survey) {
-      return res.status(httpStatus.NOT_FOUND)
+      return res
+        .status(httpStatus.NOT_FOUND)
         .json({
           message: 'Survey with same email not found.'
         });
@@ -64,7 +68,8 @@ async function getAnswer(req, res, next) {
     const answer = await Answer.findById(id);
 
     if (!answer) {
-      return res.status(httpStatus.NOT_FOUND)
+      return res
+        .status(httpStatus.NOT_FOUND)
         .json({
           message: 'Answer with same id not found.'
         });
@@ -72,7 +77,7 @@ async function getAnswer(req, res, next) {
 
     answer.survey = survey;
 
-    return res.status(200)
+    return res
       .json(answer);
   } catch (error) {
     return next(error);
@@ -89,14 +94,16 @@ async function getAnswers(req, res, next) {
     const survey = await Survey.findOne({ url });
 
     if (!survey) {
-      return res.status(httpStatus.NOT_FOUND).json({
-        message: 'Survey with same email not found.'
-      });
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({
+          message: 'Survey with same email not found.'
+        });
     }
 
     const answers = await Answer.find({ survey: survey._id }).populate('survey');
 
-    return res.status(httpStatus.OK)
+    return res
       .json(answers);
   } catch (error) {
     return next(error);
